@@ -1,0 +1,134 @@
+:root {
+    --bg: #0f1116;
+    --card: #161b22;
+    --accent: #ff7a00;
+    --accent-2: #ff9d3d;
+    --text: #e6e8ec;
+    --muted: #8b95a5;
+}
+
+body {
+    background: var(--bg);
+}
+
+section.main {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.block-container {
+    padding-top: 1.5rem;
+}
+
+/* Cabeçalhos */
+h1 {
+    margin-top: 0.5rem;
+    text-align: center;
+    color: var(--accent);
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+/* Inputs */
+.stTextInput>div>div>input,
+.stNumberInput>div>div>input {
+    border-radius: 8px;
+}
+
+[data-testid="stTextInput"] input {
+    font-size: 16px;
+    padding: 12px 16px;
+    box-sizing: border-box;
+}
+
+/* Remove olho nativo do navegador */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none !important;
+    width: 0 !important;
+}
+
+/* Botões */
+.stButton>button,
+button[kind="primary"] {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #0f0f0f;
+    border-radius: 12px;
+    padding: 10px 32px;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    line-height: 1.2;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+/* Cards */
+.card {
+    background: var(--card);
+    border: 1px solid #1f2630;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Tabela/DataFrame */
+.dataframe th {
+    background-color: var(--accent) !important;
+    color: white !important;
+}
+
+.stDataFrame table {
+    border-collapse: collapse;
+}
+
+.stDataFrame th,
+.stDataFrame td {
+    border: none !important;
+}
+
+.stDataFrame tbody tr:hover td {
+    background: rgba(255, 122, 0, 0.08);
+}
+
+.dataframe tbody tr th {
+    display: none;
+}
+
+/* Texto auxiliar */
+p,
+label,
+.stMarkdown {
+    color: var(--text);
+}
+
+/* Esconde hints de teclado em selects (fallback via CSS) */
+[data-testid="stSelectbox"] [role="status"],
+[data-testid="stSelectbox"] [aria-live],
+[data-testid="stMultiSelect"] [role="status"],
+[data-testid="stMultiSelect"] [aria-live],
+[data-baseweb="select"] [role="status"],
+[data-baseweb="select"] [aria-live] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+button[aria-label="Show password text"],
+button[title="Show password text"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: absolute !important;
+    pointer-events: none !important;
+}
