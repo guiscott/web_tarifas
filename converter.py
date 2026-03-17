@@ -2,7 +2,7 @@ import pandas as pd
 import sqlite3
 
 print("Lendo Excel...")
-df = pd.read_excel("C:/Users/guisc/Desktop/web_tarifas/base.xlsx")
+df = pd.read_excel("base.xlsx")
 print("Linhas carregadas: ", len(df))
 
 print("Criando banco...")

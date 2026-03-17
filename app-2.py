@@ -228,12 +228,13 @@ def calcular_tarifa(origem, destino, cia, categoria, peso, conn, novo_valor_kg_o
         if peso_cobrado <= 30:
             linha = buscar_linha(conn, origem, destino, cia, categoria, peso=peso_cobrado)
             if linha is not None and not pd.isna(linha["valor"]):
-                return linha["valor"]
+                return aplicar_tarifa_minima(linha["valor"], linha["tarifa_minima"])
         else:
-            # Busca o valor fixo da faixa de 30kg
+        # Busca o valor fixo da faixa de 30kg
             linha_30 = buscar_linha(conn, origem, destino, cia, categoria, peso=30, peso_exact=True)
             if linha_30 is not None and not pd.isna(linha_30["valor"]) and not pd.isna(linha_30["excedente"]):
-                return linha_30["valor"] + (peso_cobrado - 30) * linha_30["excedente"]
+                valor_calculado = linha_30["valor"] + (peso_cobrado - 30) * linha_30["excedente"]
+                return aplicar_tarifa_minima(valor_calculado, linha_30["tarifa_minima"])
 
         return None
 
@@ -292,10 +293,10 @@ try:
     # ── Campos de consulta ──────────────────────────────────
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1.8])
     with col1:
-        origem = st.text_input("Origem (ex: CAX)", key="origem")
+        origem = st.text_input("Origem (ex: CAX)", key="origem").upper()
 
     with col2:
-        destino = st.text_input("Destino (ex: GRU)", key="destino")
+        destino = st.text_input("Destino (ex: GRU)", key="destino").upper()
         destino = st.session_state.get("destino", "").upper().strip()
     with col3:
         peso = st.number_input("Peso (kg)", min_value=0.5, step=0.5, key="peso")
@@ -434,7 +435,7 @@ try:
                     )
                 with col_imp2:
                     st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
-                    importar_btn = st.button("✅ Confirmar Importação", key="confirmar_import_banco")
+                    importar_btn = st.button("Confirmar Importação", key="confirmar_import_banco")
 
                 if importar_btn:
                     if make_hash(senha_import) != USUARIOS["admin"]["senha_hash"]:
