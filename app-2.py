@@ -416,7 +416,7 @@ try:
                 exportar_btn = st.button("📤 Exportar Banco", key="btn_exportar")
 
             if exportar_btn:
-                if make_hash(senha_export) != USUARIOS["admin"]["senha_hash"]:
+                if make_hash(senha_export) != USUARIOS["operacao"]["senha_hash"]:
                     st.error("❌ Senha incorreta. Exportação não autorizada.")
                 else:
                     with st.spinner("Gerando arquivo..."):
@@ -453,7 +453,7 @@ try:
                     importar_btn = st.button("Confirmar Importação", key="confirmar_import_banco")
 
                 if importar_btn:
-                    if make_hash(senha_import) != USUARIOS["admin"]["senha_hash"]:
+                    if make_hash(senha_import) != USUARIOS["operacao"]["senha_hash"]:
                         st.error("❌ Senha incorreta. Importação não autorizada.")
                     else:
                         st.warning("⚠️ Esta ação substituirá todos os dados do banco.")
