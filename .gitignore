@@ -1,5 +1,6 @@
 # Banco de dados
 base.db
+base.xlsx
 
 # Arquivos Python
 __pycache__/
