@@ -4,6 +4,7 @@ import sqlite3
 import math
 import io
 import hashlib
+import os
 import pathlib
 import streamlit.components.v1 as components
 
@@ -23,13 +24,13 @@ def make_hash(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
 
 USUARIOS = {
-    "admin": {
-        "senha_hash": make_hash("admin123"),   # ← troque "admin123" pela senha desejada
+    "operacao": {
+        "senha_hash": os.getenv("SENHA_ADMIN", make_hash("operacao7474*")),
         "perfil": "adm",
         "nome": "Administrador"
     },
-    "usuario": {
-        "senha_hash": make_hash("user123"),    # ← troque "user123" pela senha desejada
+    "comercial": {
+        "senha_hash": os.getenv("SENHA_USUARIO", make_hash("comercial2026*")),
         "perfil": "usuario",
         "nome": "Usuário"
     },
