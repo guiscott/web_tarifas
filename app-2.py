@@ -63,6 +63,7 @@ def tela_login():
                 st.session_state["nome_usuario"] = user["nome"]
                 st.session_state["login"] = login_input.strip()
                 st.rerun()
+                st.session_state["ultimo_acesso"] = time.time()
             else:
                 st.error("Usuário ou senha incorretos.")
 
@@ -86,8 +87,21 @@ load_css("style.css")
 # ------------------------------------------------------------
 # CONTROLE DE SESSÃO — redireciona para login se não autenticado
 # ------------------------------------------------------------
+import time
+
 if "autenticado" not in st.session_state:
     st.session_state["autenticado"] = False
+
+if st.session_state["autenticado"]:
+    # Verifica timeout de 1 hora (3600 segundos)
+    ultimo_acesso = st.session_state.get("ultimo_acesso", time.time())
+    if time.time() - ultimo_acesso > 3600:
+        for key in ["autenticado", "perfil", "nome_usuario", "login", "ultimo_acesso"]:
+            st.session_state.pop(key, None)
+        st.warning("Sua sessão expirou. Faça login novamente.")
+        st.rerun()
+    else:
+        st.session_state["ultimo_acesso"] = time.time()
 
 if not st.session_state["autenticado"]:
     tela_login()
