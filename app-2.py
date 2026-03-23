@@ -8,6 +8,8 @@ import os
 import pathlib
 import streamlit.components.v1 as components
 
+st.set_page_config(page_title="Vésper | Tarifas", page_icon="✈️")
+
 def load_js(path):
     try:
         js = pathlib.Path(path).read_text()
