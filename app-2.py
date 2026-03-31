@@ -27,12 +27,12 @@ def make_hash(password: str) -> str:
 
 USUARIOS = {
     "operacao": {
-        "senha_hash": os.getenv("SENHA_ADMIN", make_hash("operacao7474*")),
+        "senha_hash": os.getenv("SENHA_ADMIN", make_hash("trocar")),
         "perfil": "adm",
         "nome": "Administrador"
     },
     "comercial": {
-        "senha_hash": os.getenv("SENHA_USUARIO", make_hash("comercial2026*")),
+        "senha_hash": os.getenv("SENHA_USUARIO", make_hash("trocar")),
         "perfil": "usuario",
         "nome": "Usuário"
     },
