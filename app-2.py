@@ -62,8 +62,8 @@ def tela_login():
                 st.session_state["perfil"] = user["perfil"]
                 st.session_state["nome_usuario"] = user["nome"]
                 st.session_state["login"] = login_input.strip()
-                st.rerun()
                 st.session_state["ultimo_acesso"] = time.time()
+                st.rerun()
             else:
                 st.error("Usuário ou senha incorretos.")
 
@@ -235,19 +235,32 @@ def calcular_tarifa(origem, destino, cia, categoria, peso, conn, novo_valor_kg_o
     categoria = categoria.upper().strip().replace(" ", "")
 
     if categoria == "PROXVOOLATAM":
-        peso_cobrado = math.ceil(peso * 2) / 2  # arredonda para cima em 0.5kg
-
-        if peso_cobrado <= 30:
-            linha = buscar_linha(conn, origem, destino, cia, categoria, peso=peso_cobrado)
-            if linha is not None and not pd.isna(linha["valor"]):
-                return aplicar_tarifa_minima(linha["valor"], linha["tarifa_minima"])
-        else:
-        # Busca o valor fixo da faixa de 30kg
+        if peso > 30:
+            linha_30 = buscar_linha(conn, origem, destino, cia, categoria, peso=30, peso_exact=True)
+            if linha_30 is not None and not pd.isna(linha_30["valor_kg"]) and not pd.isna(linha_30["excedente"]):
+                return linha_30["valor_kg"] * 30 + (peso - 30) * linha_30["excedente"]
+            return None
+        peso_cobrado = math.floor(peso * 2) / 2
+        linha = buscar_linha(conn, origem, destino, cia, categoria, peso=peso_cobrado, peso_exact=True)
+        if linha is not None and not pd.isna(linha["valor_kg"]):
+            if peso < 0.5:
+                return linha["valor_kg"]
+            elif peso < 1.0:
+                return linha["valor_kg"]
+            else:
+                return linha["valor_kg"] * peso
+        return None
+    
+    if cia == "AZUL" and categoria in ("EXPRESSO", "AZULPREMIUM"):
+        if peso > 30:
             linha_30 = buscar_linha(conn, origem, destino, cia, categoria, peso=30, peso_exact=True)
             if linha_30 is not None and not pd.isna(linha_30["valor"]) and not pd.isna(linha_30["excedente"]):
-                valor_calculado = linha_30["valor"] + (peso_cobrado - 30) * linha_30["excedente"]
-                return aplicar_tarifa_minima(valor_calculado, linha_30["tarifa_minima"])
-
+                return aplicar_tarifa_minima(linha_30["valor"] + (peso - 30) * linha_30["excedente"], linha_30["tarifa_minima"])
+            return None
+        peso_busca = 0.1 if peso == 0.1 else max(math.ceil(peso), 1.0)
+        linha = buscar_linha(conn, origem, destino, cia, categoria, peso=peso_busca, peso_exact=True)
+        if linha is not None and not pd.isna(linha["valor"]):
+            return aplicar_tarifa_minima(linha["valor"], linha["tarifa_minima"])
         return None
 
     if cia == "AZUL" and categoria == "STANDARD":
