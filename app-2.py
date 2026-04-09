@@ -19,8 +19,6 @@ def load_js(path):
 
 # ------------------------------------------------------------
 # CONFIGURAÇÃO DE USUÁRIOS
-# Altere as senhas aqui. Os valores são hashes SHA-256.
-# Para gerar um novo hash: hashlib.sha256("sua_senha".encode()).hexdigest()
 # ------------------------------------------------------------
 def make_hash(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
@@ -87,7 +85,7 @@ def load_css(path):
 load_css("style.css")
 
 # ------------------------------------------------------------
-# CONTROLE DE SESSÃO — redireciona para login se não autenticado
+# CONTROLE DE SESSÃO
 # ------------------------------------------------------------
 import time
 
@@ -124,9 +122,6 @@ with col_sessao:
     if st.button("Sair", key="btn_logout"):
         logout()
 
-# ------------------------------------------------------------
-# BANCO DE DADOS - INICIALIZAÇÃO
-# ------------------------------------------------------------
 # ------------------------------------------------------------
 # BANCO DE DADOS - INICIALIZAÇÃO
 # ------------------------------------------------------------
