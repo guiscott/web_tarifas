@@ -93,9 +93,9 @@ if "autenticado" not in st.session_state:
     st.session_state["autenticado"] = False
 
 if st.session_state["autenticado"]:
-    # Verifica timeout de 1 hora (3600 segundos)
+    # Verifica timeout de 3 horas (10800 segundos)
     ultimo_acesso = st.session_state.get("ultimo_acesso", time.time())
-    if time.time() - ultimo_acesso > 3600:
+    if time.time() - ultimo_acesso > 10800:
         for key in ["autenticado", "perfil", "nome_usuario", "login", "ultimo_acesso"]:
             st.session_state.pop(key, None)
         st.warning("Sua sessão expirou. Faça login novamente.")
