@@ -240,15 +240,16 @@ def calcular_tarifa(origem, destino, cia, categoria, peso, conn, novo_valor_kg_o
             if linha_30 is not None and not pd.isna(linha_30["valor_kg"]) and not pd.isna(linha_30["excedente"]):
                 return linha_30["valor_kg"] * 30 + (peso - 30) * linha_30["excedente"]
             return None
-        peso_cobrado = math.floor(peso * 2) / 2
-        linha = buscar_linha(conn, origem, destino, cia, categoria, peso=peso_cobrado, peso_exact=True)
+    
+        # Arredonda PARA CIMA a faixa de cobro
+        peso_cobrado = math.ceil(peso * 2) / 2
+    
+        # Mas busca o valor da linha ANTERIOR
+        peso_linha_anterior = peso_cobrado - 0.5 if peso_cobrado > 0.5 else 0.5
+        linha = buscar_linha(conn, origem, destino, cia, categoria, peso=peso_linha_anterior, peso_exact=True)
+    
         if linha is not None and not pd.isna(linha["valor_kg"]):
-            if peso < 0.5:
-                return linha["valor_kg"]
-            elif peso < 1.0:
-                return linha["valor_kg"]
-            else:
-                return linha["valor_kg"] * peso
+            return linha["valor_kg"] * peso_cobrado  # Multiplica pelo peso que será COBRADO
         return None
     
     if cia == "AZUL" and categoria in ("EXPRESSO", "AZULPREMIUM"):
